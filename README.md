@@ -260,11 +260,9 @@ const AuthProvider =({children}) =>{
 export default AuthProvider;
 
 ```
-## Login with `Google` ------->
+## Update profile ------->
 
-### create `googleProvider` create a arrow function and import `GoogleAuthProvider` and `signInWithPopup ` from `firebase/auth` ------>
-
-###  `googleProvider` provider create korer somay `GoogleAuthProvider` er age `new` dite hobe ------>
+### create a arrow function and import `updateProfile` from `firebase/auth` ki ki update korte chai ta pass korte hobe pros hisabe------>
 
 ```js
 //-------------------import element--------
@@ -275,7 +273,7 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     updateProfile,
-    signInWithPopup
+    
     } from 'firebase/auth'
 
 //------create AuthContext--------
@@ -312,11 +310,7 @@ const AuthProvider =({children}) =>{
     }
 
 
- // googleWith sign In
-    const signInWithGoogle = () => {
-        setLoading(true)
-        return signInWithPopup(auth, googleProvider)
-    }
+ 
 
     const authInfo = {
         user,
@@ -338,10 +332,12 @@ const AuthProvider =({children}) =>{
 export default AuthProvider;
 
 ```
-## Update profile ------->
 
-### create a arrow function and import `updateProfile` from `firebase/auth` ki ki update korte chai ta pass korte hobe pros hisabe------>
+## Login with `Google` ------->
 
+### create `googleProvider` create a arrow function and import `GoogleAuthProvider` and `signInWithPopup ` from `firebase/auth` ------>
+
+###  `googleProvider` provider create korer somay `GoogleAuthProvider` er age `new` dite hobe ------>
 ```js
 //-------------------import element--------
 import { createContext,useState} from "react";
@@ -350,7 +346,8 @@ import {
     getAuth,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
-    updateProfile
+    updateProfile,
+    signInWithPopup
     } from 'firebase/auth'
 
 //------create AuthContext--------
@@ -383,14 +380,19 @@ const AuthProvider =({children}) =>{
             photoURL: photo
         })
     }
-
+// googleWith sign In
+    const signInWithGoogle = () => {
+        setLoading(true)
+        return signInWithPopup(auth, googleProvider)
+    }
 
     const authInfo = {
         user,
         loading,
         createUser,
         signIn,
-        updateUserProfile
+        updateUserProfile,
+        signInWithGoogle
         
     }
 
@@ -399,6 +401,187 @@ const AuthProvider =({children}) =>{
             {children}
         </AuthContext.Provider>
     );
+}
+
+export default AuthProvider;
+
+```
+## User Logout ------->
+
+### create a arrow function and import `signOut ` from `firebase/auth` ------>
+
+
+```js
+//-------------------import element--------
+import { createContext,useState} from "react";
+import { app } from '../firebase/firebase.config'
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    updateProfile,
+    signInWithPopup,
+    signOut
+    } from 'firebase/auth'
+
+//------create AuthContext--------
+export const AuthContext = createContext(null);
+const auth = getAuth(app);
+
+const AuthProvider =({children}) =>{
+ 
+           //-----state------
+     const [user, setUser] = useState(null)
+    const [loading, setLoading] = useState(true)
+
+
+     // createUser
+    const createUser = (email, password) => {
+        setLoading(true)
+        return createUserWithEmailAndPassword(auth,email, password)
+    }
+
+      // loginUser
+    const signIn = (email, password) => {
+        setLoading(true)
+        return signInWithEmailAndPassword(auth,email, password)
+    }
+
+        // update profile
+    const updateUserProfile = (name, photo) => {
+        return updateProfile(auth.currentUser, {
+            displayName: name,
+            photoURL: photo
+        })
+    }
+// googleWith sign In
+    const signInWithGoogle = () => {
+        setLoading(true)
+        return signInWithPopup(auth, googleProvider)
+    }
+
+    //  logout
+    const logOut = () => {
+        setLoading(true)
+     return signOut(auth)
+    }
+
+    const authInfo = {
+        user,
+        loading,
+        createUser,
+        signIn,
+        updateUserProfile,
+        signInWithGoogle,
+        logOut
+        
+    }
+
+     return (
+         <AuthContext.Provider value={authInfo}>
+            {children}
+        </AuthContext.Provider>
+    );
+}
+
+export default AuthProvider;
+
+```
+## onAuthStateChange ------->
+
+### create a arrow function and import `onAuthStateChanged ` from `firebase/auth` ------>
+
+
+```js
+//-------------------import element--------
+import { createContext,useState,useEffect} from "react";
+import { app } from '../firebase/firebase.config'
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    updateProfile,
+    signInWithPopup,
+    signOut,
+    onAuthStateChanged
+    } from 'firebase/auth'
+
+//------create AuthContext--------
+export const AuthContext = createContext(null);
+const auth = getAuth(app);
+
+const AuthProvider =({children}) =>{
+ 
+           //-----state------
+     const [user, setUser] = useState(null)
+    const [loading, setLoading] = useState(true)
+
+
+     // createUser
+    const createUser = (email, password) => {
+        setLoading(true)
+        return createUserWithEmailAndPassword(auth,email, password)
+    }
+
+      // loginUser
+    const signIn = (email, password) => {
+        setLoading(true)
+        return signInWithEmailAndPassword(auth,email, password)
+    }
+
+        // update profile
+    const updateUserProfile = (name, photo) => {
+        return updateProfile(auth.currentUser, {
+            displayName: name,
+            photoURL: photo
+        })
+    }
+// googleWith sign In
+    const signInWithGoogle = () => {
+        setLoading(true)
+        return signInWithPopup(auth, googleProvider)
+    }
+
+    //  logout
+    const logOut = () => {
+        setLoading(true)
+     return signOut(auth)
+    }
+
+    //  onAuthStateChange
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, currentUser => {
+            setUser(currentUser)
+            console.log('CurrentUser-->', currentUser)
+            setLoading(false)
+        })
+        return () => {
+            return unsubscribe()
+        }
+    }, [])
+
+    const authInfo = {
+        user,
+        loading,
+        createUser,
+        signIn,
+        updateUserProfile,
+        signInWithGoogle,
+        logOut
+        
+    }
+
+     return (
+         <AuthContext.Provider value={authInfo}>
+            {children}
+        </AuthContext.Provider>
+    );
+}
+
+
+// propTypes
+AuthProvider.propTypes = {
+    children: PropTypes.node
 }
 
 export default AuthProvider;
