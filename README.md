@@ -10,7 +10,7 @@ npm install firebase
 
 ```
 
-### Create a file `firebase.config.js`--->
+### Create a file `firebase.config.js` and export `auth`--->
 
 
 ```js
@@ -33,6 +33,8 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
+export const auth = getAuth(app);
+
 ```
 
 ### Create a file `.env.local`--->
@@ -45,5 +47,45 @@ VITE_PROJECTID="firebase_config"
 VITE_STORAGEBUCKET="firebase_config"
 VITE_MESSAGINGSENDERID="firebase_config"
 VITE_APPID="firebase_config"
+
+```
+
+# Authentication---->
+
+### Create a file `AuthProvider.jsx`------->
+
+```js
+
+const AuthProvider =() =>{
+     return (
+        <div>
+          
+        </div>
+    );
+}
+
+export default AuthProvider;
+
+```
+
+### create `AuthContext` and `children` props ------->
+
+```js
+//-------------------import element--------
+import { createContext} from "react";
+
+
+//------create AuthContext--------
+export const AuthContext = createContext(null);
+
+const AuthProvider =({children}) =>{
+     return (
+         <AuthContext.Provider>
+            {children}
+        </AuthContext.Provider>
+    );
+}
+
+export default AuthProvider;
 
 ```
