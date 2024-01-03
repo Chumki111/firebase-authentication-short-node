@@ -587,3 +587,23 @@ AuthProvider.propTypes = {
 export default AuthProvider;
 
 ```
+
+## `useAuth` hook------>
+
+### `useAuth` hook create kora ber ber `useContext` and `AuthContext` k daka lagbe na
+
+```js
+import { useContext } from "react";
+import { AuthContext } from "AuthProvider";
+
+
+const useAuth = () => {
+    const auth = useContext(AuthContext)
+    return auth
+  
+
+}
+
+export default useAuth;
+
+```
