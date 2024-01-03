@@ -260,7 +260,85 @@ const AuthProvider =({children}) =>{
 export default AuthProvider;
 
 ```
-## Login Update profile ------->
+## Login with `Google` ------->
+
+### create `googleProvider` create a arrow function and import `GoogleAuthProvider` and `signInWithPopup ` from `firebase/auth` ------>
+
+###  `googleProvider` provider create korer somay `GoogleAuthProvider` er age `new` dite hobe ------>
+
+```js
+//-------------------import element--------
+import { createContext,useState} from "react";
+import { app } from '../firebase/firebase.config'
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    updateProfile,
+    signInWithPopup
+    } from 'firebase/auth'
+
+//------create AuthContext--------
+export const AuthContext = createContext(null);
+const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
+
+
+const AuthProvider =({children}) =>{
+ 
+           //-----state------
+     const [user, setUser] = useState(null)
+    const [loading, setLoading] = useState(true)
+
+
+     // createUser
+    const createUser = (email, password) => {
+        setLoading(true)
+        return createUserWithEmailAndPassword(auth,email, password)
+    }
+
+      // loginUser
+    const signIn = (email, password) => {
+        setLoading(true)
+        return signInWithEmailAndPassword(auth,email, password)
+    }
+
+        // update profile
+    const updateUserProfile = (name, photo) => {
+        return updateProfile(auth.currentUser, {
+            displayName: name,
+            photoURL: photo
+        })
+    }
+
+
+ // googleWith sign In
+    const signInWithGoogle = () => {
+        setLoading(true)
+        return signInWithPopup(auth, googleProvider)
+    }
+
+    const authInfo = {
+        user,
+        loading,
+        createUser,
+        signIn,
+        updateUserProfile,
+        signInWithGoogle
+        
+    }
+
+     return (
+         <AuthContext.Provider value={authInfo}>
+            {children}
+        </AuthContext.Provider>
+    );
+}
+
+export default AuthProvider;
+
+```
+## Update profile ------->
 
 ### create a arrow function and import `updateProfile` from `firebase/auth` ki ki update korte chai ta pass korte hobe pros hisabe------>
 
