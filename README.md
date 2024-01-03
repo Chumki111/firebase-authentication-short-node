@@ -31,9 +31,9 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 
-export const auth = getAuth(app);
+
 
 ```
 
@@ -109,6 +109,89 @@ const AuthProvider =({children}) =>{
     const authInfo = {
         user,
         loading
+        
+    }
+
+     return (
+         <AuthContext.Provider value={authInfo}>
+            {children}
+        </AuthContext.Provider>
+    );
+}
+
+export default AuthProvider;
+
+```
+
+### import `app` from `firebase.config` and `getAuth` from `from firebase/auth` ------->
+
+```js
+//-------------------import element--------
+import { createContext,useState} from "react";
+import { app } from '../firebase/firebase.config'
+import {getAuth} from 'firebase/auth'
+
+//------create AuthContext--------
+export const AuthContext = createContext(null);
+const auth = getAuth(app);
+
+const AuthProvider =({children}) =>{
+ 
+           //-----state------
+     const [user, setUser] = useState(null)
+    const [loading, setLoading] = useState(true)
+
+    const authInfo = {
+        user,
+        loading
+        
+    }
+
+     return (
+         <AuthContext.Provider value={authInfo}>
+            {children}
+        </AuthContext.Provider>
+    );
+}
+
+export default AuthProvider;
+
+```
+
+## Create a user with `emailAndPassword` ------->
+
+## create a arrow function and import `createUserWithEmailAndPassword` from `firebase/auth` and 2 props `email,password` pass and `auth` . Then pass the function of value
+
+```js
+//-------------------import element--------
+import { createContext,useState} from "react";
+import { app } from '../firebase/firebase.config'
+import {
+    getAuth,
+    createUserWithEmailAndPassword
+    } from 'firebase/auth'
+
+//------create AuthContext--------
+export const AuthContext = createContext(null);
+const auth = getAuth(app);
+
+const AuthProvider =({children}) =>{
+ 
+           //-----state------
+     const [user, setUser] = useState(null)
+    const [loading, setLoading] = useState(true)
+
+
+     // createUser
+    const createUser = (email, password) => {
+        setLoading(true)
+        return createUserWithEmailAndPassword(auth,email, password)
+    }
+
+    const authInfo = {
+        user,
+        loading,
+        createUser
         
     }
 
