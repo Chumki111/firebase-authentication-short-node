@@ -215,7 +215,8 @@ import { createContext,useState} from "react";
 import { app } from '../firebase/firebase.config'
 import {
     getAuth,
-    createUserWithEmailAndPassword
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword
     } from 'firebase/auth'
 
 //------create AuthContext--------
@@ -246,6 +247,72 @@ const AuthProvider =({children}) =>{
         loading,
         createUser,
         signIn
+        
+    }
+
+     return (
+         <AuthContext.Provider value={authInfo}>
+            {children}
+        </AuthContext.Provider>
+    );
+}
+
+export default AuthProvider;
+
+```
+## Login Update profile ------->
+
+### create a arrow function and import `updateProfile` from `firebase/auth` ki ki update korte chai ta pass korte hobe pros hisabe------>
+
+```js
+//-------------------import element--------
+import { createContext,useState} from "react";
+import { app } from '../firebase/firebase.config'
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    updateProfile
+    } from 'firebase/auth'
+
+//------create AuthContext--------
+export const AuthContext = createContext(null);
+const auth = getAuth(app);
+
+const AuthProvider =({children}) =>{
+ 
+           //-----state------
+     const [user, setUser] = useState(null)
+    const [loading, setLoading] = useState(true)
+
+
+     // createUser
+    const createUser = (email, password) => {
+        setLoading(true)
+        return createUserWithEmailAndPassword(auth,email, password)
+    }
+
+      // loginUser
+    const signIn = (email, password) => {
+        setLoading(true)
+        return signInWithEmailAndPassword(auth,email, password)
+    }
+
+        // update profile
+    const updateUserProfile = (name, photo) => {
+        return updateProfile(auth.currentUser, {
+            displayName: name,
+            photoURL: photo
+        })
+    }
+
+
+    const authInfo = {
+        user,
+        loading,
+        createUser,
+        signIn,
+        updateUserProfile
         
     }
 
