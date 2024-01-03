@@ -89,3 +89,36 @@ const AuthProvider =({children}) =>{
 export default AuthProvider;
 
 ```
+
+### create 2 state and value ------->
+
+```js
+//-------------------import element--------
+import { createContext,useState} from "react";
+
+
+//------create AuthContext--------
+export const AuthContext = createContext(null);
+
+const AuthProvider =({children}) =>{
+ 
+           //-----state------
+     const [user, setUser] = useState(null)
+    const [loading, setLoading] = useState(true)
+
+    const authInfo = {
+        user,
+        loading
+        
+    }
+
+     return (
+         <AuthContext.Provider value={authInfo}>
+            {children}
+        </AuthContext.Provider>
+    );
+}
+
+export default AuthProvider;
+
+```
