@@ -607,3 +607,14 @@ const useAuth = () => {
 export default useAuth;
 
 ```
+
+### login r register korer somay ja ja dorker ta `useAuth` hook k call kora nite pari
+
+
+```js
+
+/// ---------------like this---------
+
+const { createUser, updateUserProfile, signInWithGoogle } = useAuth()
+
+```
